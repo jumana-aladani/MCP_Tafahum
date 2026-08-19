@@ -1,0 +1,783 @@
+{
+  "name": "tafahum_mcp",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "23d8e758-1933-428c-8bfa-abfc459321c3"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        -80
+      ],
+      "id": "c9110396-9265-4c8c-9c3f-08d885215bd4",
+      "name": "MCP Server Trigger",
+      "webhookId": "23d8e758-1933-428c-8bfa-abfc459321c3"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get row(s) in sheet in Google Sheetsترجّع القاموس الطبي كاملاً: المصطلح بالعربية والإنجليزية وترجمته المعتمدة بالأوردية والبنغالية وتصنيفه. ابحث في القائمة عن المصطلح المطلوب أو أقرب مرادف له في المعنى — المطابقة دلالية وليست حرفية، فقد يرد المصطلح بصيغة مختلفة (مثل \"ألم صدر\" مقابل \"ألم في الصدر\"). استخدم هذه الأداة إلزامياً قبل أي مصطلح طبي يصل للمريض، خصوصاً أسماء الأدوية والجرعات والتكرارات وأسئلة السلامة. لا تترجم المصطلحات الطبية ترجمة حرة أبداً. إذا لم تجد المصطلح ولا مرادفاً واضحاً له، أبلغ الطبيب صراحةً بأنه غير موجود بدل التخمين. Returns the full medical glossary. Match semantically, not literally. Mandatory before any medical terminology reaches the patient. If absent, report it - never guess.",
+        "documentId": {
+          "__rl": true,
+          "value": "1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U",
+          "mode": "list",
+          "cachedResultName": "تفاهم",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1019790863,
+          "mode": "list",
+          "cachedResultName": "glossary",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit#gid=1019790863"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -832,
+        192
+      ],
+      "id": "94cc0cee-7a1a-4244-972f-c1ab1c558da6",
+      "name": "get_glossary_term",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NdpAdtBCboJiM91a",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get row(s) in sheet in Google Sheetsترجّع سيناريو اختبار لمريض وهمي: شكواه مكتوبة بلغته الأصلية في حقل\ncomplaint_verbatim، والترجمة العربية الصحيحة المعتمدة في\nexpected_translation_ar، والتفاصيل التي يجب ألا تضيع، وأسئلة الطبيب\nالمتوقعة. تُستخدم في مرحلة الاختبار فقط لمحاكاة مريض وهمي. لا تعرض\nحقل expected_translation_ar للطبيب أثناء الاختبار إلا إذا طُلب منك\nصراحةً مقارنة النتائج — فهو مفتاح الإجابة.\nReturns a simulated-patient test scenario. expected_translation_ar\nis the answer key; do not reveal it unless explicitly asked.",
+        "documentId": {
+          "__rl": true,
+          "value": "1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U",
+          "mode": "list",
+          "cachedResultName": "تفاهم",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2087645403,
+          "mode": "list",
+          "cachedResultName": "scenarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit#gid=2087645403"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "scenario_id",
+              "lookupValue": "={{ $fromAI('scenario_id', 'معرّف السيناريو مثل S01', 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -672,
+        192
+      ],
+      "id": "1749214a-af58-46ef-b614-136c107562a0",
+      "name": "get_scenario",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NdpAdtBCboJiM91a",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "ترجّع ملف المريض: العمر، الجنس، الجنسية، لغته المفضّلة، لهجته،\nمستوى تعليمه، ومهنته. انتبه لحقل literacy_level: إذا كان \"أمي\" أو\n\"منخفض\" فيجب أن تكون كل التعليمات بجمل قصيرة جداً وبلغة يومية بسيطة،\nوأن يُنبَّه الطبيب أن التعليمات المكتوبة وحدها لن تكفي وأنها تحتاج\nصيغة صوتية. استخدمها في بداية كل زيارة قبل أي شيء آخر.\nReturns the patient profile. Pay attention to literacy_level: low or\nilliterate requires very short plain sentences and spoken instructions.",
+        "documentId": {
+          "__rl": true,
+          "value": "1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U",
+          "mode": "list",
+          "cachedResultName": "تفاهم",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 670902208,
+          "mode": "list",
+          "cachedResultName": "patients",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit#gid=670902208"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "patient_id",
+              "lookupValue": "={{ $fromAI('patient_id', 'معرّف المريض مثل P001', 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -528,
+        192
+      ],
+      "id": "39e99bfb-c865-45f9-ba1e-b8a080e7d05a",
+      "name": "get_patient_profile",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NdpAdtBCboJiM91a",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "ترجّع قائمة عبارات الإنذار بثلاث لغات. قارن كلام المريض بها، وإذا\nتطابق أو اقترب شيء، أبرز للطبيب العبارة الحرفية التي قالها المريض\nبلغته الأصلية مع ترجمتها، بصيغة اقتباس فقط: «المريض قال: ...».\nممنوع منعاً باتاً أن تصف الحالة بأنها طارئة أو عاجلة، أو تشخّص، أو\nتقترح إجراءً أو فحصاً أو تحويلاً. أنت تعرض ما قاله المريض فقط،\nوالقرار الطبي للطبيب وحده.\nReturns red-flag phrases. Surface the patient's verbatim wording as a\nquote only. Never label urgency, diagnose, or recommend any action.",
+        "documentId": {
+          "__rl": true,
+          "value": "1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U",
+          "mode": "list",
+          "cachedResultName": "تفاهم",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1361764037,
+          "mode": "list",
+          "cachedResultName": "red_flag_phrases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit#gid=1361764037"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -368,
+        192
+      ],
+      "id": "b45b0656-0fda-45e5-b22b-50d0d5841b29",
+      "name": "check_red_flag",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NdpAdtBCboJiM91a",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "تسجّل جملة واحدة من المحادثة في سجل الزيارة. قاعدة إلزامية: احفظ\nالنص الأصلي بلغة المتحدث كما قيل حرفياً في حقل original_text، ولا\nتستبدله بالترجمة ولا تصحّحه ولا تختصره أبداً. سجّل درجة ثقتك في\nالترجمة بصدق، وضع flagged=نعم مع ذكر السبب إذا كنت غير واثق من\nالمعنى أو كان المصطلح غير موجود في القاموس.\nLogs one utterance. The verbatim original must always be preserved\nexactly as spoken — never replaced, corrected, or shortened.",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U",
+          "mode": "list",
+          "cachedResultName": "تفاهم",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1735531901,
+          "mode": "list",
+          "cachedResultName": "utterances",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit#gid=1735531901"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "utterance_id": "={{ $fromAI('utterance_id', 'معرّف فريد مثل UTT-0001', 'string') }}",
+            "session_id": "={{ $fromAI('session_id', '', 'string') }}",
+            "speaker": "={{ $fromAI('speaker', 'طبيب أو مريض أو مرافق', 'string') }}",
+            "original_text": "={{ $fromAI('original_text', 'النص كما قيل بلغته الأصلية حرفياً', 'string') }}",
+            "original_language": "={{ $fromAI('original_language', 'ar أو ur أو bn', 'string') }}",
+            "translated_text": "={{ $fromAI('translated_text', '', 'string') }}",
+            "confidence_score": "={{ $fromAI('confidence_score', 'رقم من 0 إلى 1', 'string') }}",
+            "flagged": "={{ $fromAI('flagged', 'نعم أو لا', 'string') }}",
+            "flag_reason": "={{ $fromAI('flag_reason', 'سبب الشك إن وجد', 'string') }}",
+            "timestamp": "={{ $now }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "utterance_id",
+              "displayName": "utterance_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "speaker",
+              "displayName": "speaker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "original_text",
+              "displayName": "original_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "original_language",
+              "displayName": "original_language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "translated_text",
+              "displayName": "translated_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "confidence_score",
+              "displayName": "confidence_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "flagged",
+              "displayName": "flagged",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "flag_reason",
+              "displayName": "flag_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -48,
+        208
+      ],
+      "id": "fbfab55b-f5d9-4777-bed0-ee66da8952d7",
+      "name": "save_utterance",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NdpAdtBCboJiM91a",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "ترجّع النص الكامل لمحادثة الزيارة مرتّباً زمنياً، بلغتين متوازيتين،\nمع تحديد من تكلّم ودرجة ثقة الترجمة لكل جملة. استخدمها لمراجعة ما\nقيل في الزيارة أو لتلخيصها للطبيب. عند التلخيص، أبرز أي جملة\nflagged=نعم لينتبه لها الطبيب.\nReturns the full bilingual transcript with speaker labels and\nconfidence. When summarising, surface any flagged utterances.",
+        "documentId": {
+          "__rl": true,
+          "value": "1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U",
+          "mode": "list",
+          "cachedResultName": "تفاهم",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1735531901,
+          "mode": "list",
+          "cachedResultName": "utterances",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit#gid=1735531901"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "session_id",
+              "lookupValue": "=\n{{ $fromAI('session_id', '', 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        112,
+        208
+      ],
+      "id": "f1afd1bf-2d15-414e-a618-6878d114c360",
+      "name": "get_session_transcript",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NdpAdtBCboJiM91a",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "تحفظ ملاحظة الزيارة كما أملاها الطبيب في جدول الجلسات. الطبيب هو من يكتب التشخيص والخطة العلاجية — انسخ كلامه كما هو حرفياً، ولا تولّد تشخيصاً ولا خطة علاج من عندك مطلقاً، ولا تكمّل ما لم يقله. إذا لم يذكر الطبيب تشخيصاً أو خطة، اترك الحقل فارغاً واسأله قبل الحفظ. Saves the doctor-authored visit note verbatim into the sessions sheet. Never generate a diagnosis or treatment plan. If the doctor did not state one, leave it blank and ask.",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U",
+          "mode": "list",
+          "cachedResultName": "تفاهم",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 573515906,
+          "mode": "list",
+          "cachedResultName": "sessions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit#gid=573515906"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('session_id', ``, 'string') }}",
+            "patient_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('patient_id', ``, 'string') }}",
+            "doctor_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('doctor_id', ``, 'string') }}",
+            "note": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('note', ``, 'string') }}",
+            "plan": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('plan', ``, 'string') }}",
+            "diagnosis": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('diagnosis', ``, 'string') }}",
+            "status": "مكتمل",
+            "duration_seconds": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('duration_seconds', ``, 'string') }}",
+            "interpreter_present": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('interpreter_present', ``, 'string') }}",
+            "department": "الباطنة",
+            "datetime": "={{ $now }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "patient_id",
+              "displayName": "patient_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "doctor_id",
+              "displayName": "doctor_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "datetime",
+              "displayName": "datetime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "department",
+              "displayName": "department",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "interpreter_present",
+              "displayName": "interpreter_present",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "duration_seconds",
+              "displayName": "duration_seconds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "diagnosis",
+              "displayName": "diagnosis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "plan",
+              "displayName": "plan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "note",
+              "displayName": "note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        304,
+        208
+      ],
+      "id": "3a5ab2f8-08e6-4777-9250-43d94f13df5a",
+      "name": "save_visit_note",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NdpAdtBCboJiM91a",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "تحفظ تعليمات ما بعد الزيارة بلغة المريض: اسم الدواء، الجرعة، عدد المرات، المدة، وموعد المراجعة. قبل كتابة أي مصطلح في هذه التعليمات استدعِ get_glossary_term له — الجرعات والتكرارات وأسماء الأدوية هي أخطر ما يُترجم آلياً. إذا لم يوجد مصطلح في القاموس، توقّف وأبلغ الطبيب بدل التخمين. اكتب جملاً قصيرة جداً بلغة يومية بسيطة، خصوصاً إذا كان مستوى تعليم المريض منخفضاً. Saves post-visit instructions in the patient's language. Every term must pass through get_glossary_term first. Stop and report if a term is missing. Use very short, plain sentences.",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U",
+          "mode": "list",
+          "cachedResultName": "تفاهم",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 378358941,
+          "mode": "list",
+          "cachedResultName": "instructions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P_Fw3hab7kMBGh2TMKmqFa2CP9nDGdtpKQ6XFMYJ98U/edit#gid=378358941"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "created_at": "={{ $now }}",
+            "text_translated": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('text_translated', ``, 'string') }}",
+            "text_ar": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('text_ar', ``, 'string') }}",
+            "duration": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('duration', ``, 'string') }}",
+            "frequency": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('frequency', ``, 'string') }}",
+            "dose": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('dose', ``, 'string') }}",
+            "medication": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('medication', ``, 'string') }}",
+            "session_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('session_id', ``, 'string') }}",
+            "instruction_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('instruction_id', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "instruction_id",
+              "displayName": "instruction_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "medication",
+              "displayName": "medication",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dose",
+              "displayName": "dose",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "frequency",
+              "displayName": "frequency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "duration",
+              "displayName": "duration",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "text_ar",
+              "displayName": "text_ar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "text_translated",
+              "displayName": "text_translated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "audio_url",
+              "displayName": "audio_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -208,
+        192
+      ],
+      "id": "c9f6da55-fdde-43c3-b92b-544e0afe06a3",
+      "name": "save_patient_instructions",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NdpAdtBCboJiM91a",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "get_glossary_term": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_scenario": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_patient_profile": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check_red_flag": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save_utterance": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_session_transcript": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save_visit_note": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save_patient_instructions": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b3447cc9-92f7-44a1-a3df-8b544204a80c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "16c3e13ed0812a26fd3e8557b91821f9c3803b366e0dbb13b547ab259660df46"
+  },
+  "nodeGroups": [],
+  "id": "7ZgXzfL08mAupPc0",
+  "tags": []
+}
